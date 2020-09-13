@@ -1,0 +1,114 @@
+service: course
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  environment:
+    COURSE_TABLE: "Course"
+    AUTHOR_TABLE: "Author"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:DeleteItem
+        - dynamodb:UpdateItem
+      Resource: "*"
+
+functions:
+  fetchauthor:
+    handler: api/authors.getall
+    memorySize: 128
+    timeout: 30
+    events:
+     - http:
+         path: authors
+         method: get
+         
+  fetchcourse:
+    handler: api/courses.getall
+    memorySize: 128
+    timeout: 30
+    events:
+    - http:
+        path: courses
+        method: get
+
+  fetchonecourse:
+    handler: api/courses.get
+    memorySize: 128
+    timeout: 30
+    events:
+      - http:
+          path: courses/{id}
+          method: get
+
+  createcourse:
+    handler: api/courses.create
+    memorySize: 128
+    timeout: 30
+    events:
+      - http:
+          path: courses
+          method: post
+
+  updatecourse:
+    handler: api/courses.update
+    memorySize: 128
+    timeout: 30
+    events:
+      - http:
+          path: courses/{id}
+          method: put
+
+  deletecourse:
+    handler: api/courses.delete
+    memorySize: 128
+    timeout: 30
+    events:
+      - http:
+          path: courses/{id}
+          method: delete
+
+resources:
+  Resources:
+    CourseDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "id"
+            AttributeType: "S"   
+        KeySchema:
+          -
+            AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: "Course"
+    AuthorDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "id"
+            AttributeType: "S"   
+        KeySchema:
+          -
+            AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: "Author"
