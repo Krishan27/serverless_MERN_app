@@ -28,6 +28,7 @@ functions:
      - http:
          path: authors
          method: get
+         cors: true
          
   fetchcourse:
     handler: api/courses.getall
@@ -37,6 +38,7 @@ functions:
     - http:
         path: courses
         method: get
+        cors: true
 
   fetchonecourse:
     handler: api/courses.get
@@ -46,6 +48,7 @@ functions:
       - http:
           path: courses/{id}
           method: get
+          cors: true
 
   createcourse:
     handler: api/courses.create
@@ -55,6 +58,7 @@ functions:
       - http:
           path: courses
           method: post
+          cors: true
 
   updatecourse:
     handler: api/courses.update
@@ -63,7 +67,8 @@ functions:
     events:
       - http:
           path: courses/{id}
-          method: put
+          methodc: put
+          cors: true
 
   deletecourse:
     handler: api/courses.delete
@@ -73,6 +78,7 @@ functions:
       - http:
           path: courses/{id}
           method: delete
+          cors: true
 
 resources:
   Resources:

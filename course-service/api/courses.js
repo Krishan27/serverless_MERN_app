@@ -27,6 +27,10 @@ module.exports.getall = (event, context, callback) => {
             console.log("Scan succeeded.");
             return callback(null, {
                 statusCode: 200,
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*'
+              },
                 body: JSON.stringify({
                     courses: data.Items
                 })
@@ -53,6 +57,10 @@ module.exports.get = (event, context, callback) => {
     .then(result => {
       const response = {
         statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+      },
         body: JSON.stringify(result.Item),
       };
       callback(null, response);
@@ -60,7 +68,12 @@ module.exports.get = (event, context, callback) => {
     .catch(error => {
       console.error(error);
       const response = {
-        statusCode: 400}
+        statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+      },
+    }
       callback(new Error('Couldn\'t fetch course.'));
       return;
     });
@@ -99,6 +112,10 @@ module.exports.create = (event, context, callback) => {
       console.log(err);
       callback(null, {
         statusCode: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+      },
         body: JSON.stringify({
           message: `Unable to submit course ${author}`
         })
@@ -191,6 +208,10 @@ module.exports.delete = (event, context, callback) => {
     .then(result => {
       const response = {
         statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+      },
         body: JSON.stringify("Course deleted"),
       };
       callback(null, response);
