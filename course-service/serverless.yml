@@ -67,7 +67,7 @@ functions:
     events:
       - http:
           path: courses/{id}
-          methodc: put
+          method: put
           cors: true
 
   deletecourse:

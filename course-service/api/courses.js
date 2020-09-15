@@ -87,16 +87,16 @@ module.exports.create = (event, context, callback) => {
   const title = requestBody.title;
   const author = requestBody.author;
   const category = requestBody.category;
-  const length = requestBody.length;
+  const duration = requestBody.duration;
   
-
-  if (typeof title !== "string" || typeof author !== "string" || typeof category !== "string" || typeof length !== "number") {
+console.log(typeof title, typeof author, typeof category , typeof duration)
+  if (typeof title !== "string" || typeof author !== "string" || typeof category !== "string" || typeof duration !== "string") {
     console.error('Validation Failed');
     callback(new Error('Couldn\'t submit candidate because of validation errors.'));
     return;
   }
 
-  submitCourse(courseInfo(title, author, category,length))
+  submitCourse(courseInfo(title, author, category,duration))
     .then(res => {
       callback(null, {
         statusCode: 200,
@@ -149,14 +149,14 @@ const submitCourse = course => {
 
 
 
-const courseInfo = (title, author, category,length) => {
+const courseInfo = (title, author, category,duration) => {
   const timestamp = new Date().getTime();
   return {
     id: uuid.v1(),
     title: title,
     author: author,
     category: category,
-    length: length,
+    duration: duration,
     submittedAt: timestamp,
     updatedAt: timestamp,
   };
@@ -174,12 +174,12 @@ module.exports.update = (async (event, context) => {
       id: event.pathParameters.id
     },
 
-    UpdateExpression: "SET title = :title, author = :author, category = :category, length= :length",
+    UpdateExpression: "SET title = :title, author = :author, category = :category, duration= :duration",
     ExpressionAttributeValues: {
       ":title": data.title ,
       ":author": data.author ,
       ":category": data.category , 
-      ":length": data.length 
+      ":duration": data.duration 
     },
     headers: {
       'Content-Type': 'application/json',
